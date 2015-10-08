@@ -1,0 +1,150 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <unistd.h>
+#include <windows.h>
+
+
+//The code is still bugged, but I'm ok to put it there. Just in case :)
+int main()
+{				    
+    int croupier[6], joueur[6], nb_carte,somme_j, somme_c, i, compteur_croupier=2, nb_points;
+    char choix, choixfinal='y';
+
+   void mysleep(unsigned int tempsDelais)
+    {
+        time_t tempsFin = time(NULL) + (time_t) tempsDelais;
+        for( ; time(NULL) < tempsFin ; );
+    }
+void fonction_affichage(int carte[],int i)
+    {
+        switch(carte[i])
+        {
+            case 11:{
+            printf("un Vallet ");
+            }break;
+            case 12:{
+            printf("une Dame ");
+            }break;
+            case 13:{
+            printf("un Rois ");
+            }break;
+            case 14:{
+            printf("un As ");
+            }break;
+            default:{
+            printf("un %d ",carte[i]);
+            }
+        }
+
+    }
+
+
+    do{
+        printf("Bonjour ! Bienvenu au casino ! Nous allons a la table de BLACK JACK \nVeuillez patienter\n");
+        mysleep(3);
+        srand(time NULL);
+        croupier[0]=2+(rand()%13);
+        croupier[1]=2+(rand()%13);
+        joueur[0]=2+(rand()%13);
+        joueur[1]=2+(rand()%13);
+
+    printf("\nLe croupier a ");
+   fonction_affichage(croupier,0);
+
+    printf(" et une autre carte qui est retournee...");
+    somme_c=croupier[0]+croupier[1];
+    printf("\nQuand a vous, vous avez ");
+    for(i=0;i<2;i++)
+        {
+            fonction_affichage(joueur,i);
+
+        if(i<1)
+        {
+            printf("et ");  //c'est très moche vu d'ici mais c'est plus joli sur la console :)
+        }
+
+
+        }
+
+            printf("\nVoulez vous piocher ? (y/n)");
+
+    while(choix=='y');
+        {   scanf("%c",&choix); //c'est bizzar la fonction getchar est sautée une fois sur deux, du coup on est obligé de mettre 2 fois la meme ligne
+               //pour saisir une fois une valeur
+            nb_carte=1;
+            joueur[nb_carte]=2+rand()%13;
+
+
+            printf("\nVous avez pioche ");
+          fonction_affichage(joueur,nb_carte);
+
+            nb_carte++;
+            printf("\nVoulez continuer a piocher ? (y/n)");
+
+
+        }
+        for(i=0;i<nb_carte;i++)
+        {
+            somme_j=somme_j+joueur[i];
+
+        }
+        printf("Vous avez donc %d points\n", somme_j);
+        printf("...Au tour du croupier");
+        mysleep(1);
+        printf(".");
+        mysleep(1);
+        printf(".");
+        mysleep(1);
+        printf(".");
+        mysleep(1);
+        printf("\nLa deuxieme carte du croupier etait ");
+       fonction_affichage(croupier,1);
+
+            printf("Le croupier pioche...");
+        while(somme_c<=17)
+        {
+            mysleep(1);
+            croupier[compteur_croupier]=2+rand()%13;
+            printf("Le croupier pioche un");
+            fonction_affichage(croupier, compteur_croupier);
+            somme_c=somme_c+croupier[compteur_croupier];
+            compteur_croupier++;
+            mysleep(3);
+        }
+    printf("Le croupier a arrete de piocher.\nIl a accumlé %d points\n", somme_c);
+
+    if(somme_j<somme_c)
+    {
+        printf("Dommage ! Le croupier vous a battu");
+    }
+    if(somme_j>21&&somme_c<22)
+    {
+        printf("Dommage ! Vous avez fait plus de 21");
+    }
+    if(somme_j>somme_c&&somme_j<22)
+    {
+        printf("Bravo ! Vous avez gagne %d points\n", somme_j);
+        nb_points=somme_j+nb_points;
+    }
+    if(somme_j==somme_c)
+    {
+        printf("Mach nul ! Vous gagnez quand meme %d points\n", somme_j/2);
+        nb_points=somme_j/2+nb_points;
+    }
+    if(somme_j>21&&somme_c>21)
+    {
+        printf("Vous avez tout les deux depassé 21, cepandant vous gagnez quand meme %d points\n", somme_j/2);
+        nb_points=somme_j/2+nb_points;
+    }
+
+    printf("\n\n\n******************************************************************\n\n");
+    printf("Vous avez actuelement %d points", nb_points);
+    printf("\nVoulez vous continuer ? (y/n)");
+    choixfinal=getchar();
+    }while(choixfinal=='y');
+    printf("Merci d'avoir jouer, au revoir");
+
+    return 0;
+}
